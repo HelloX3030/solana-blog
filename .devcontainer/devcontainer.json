@@ -1,0 +1,19 @@
+{
+	"name": "Solana Dev",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"rust-lang.rust-analyzer",
+				"marquiswang.solana-snippets",
+				"esbenp.prettier-vscode"
+			],
+			"settings": {
+				"terminal.integrated.defaultProfile.linux": "bash"
+			}
+		}
+	},
+	"postCreateCommand": "rustc --version && cargo --version && solana --version && anchor --version"
+}
