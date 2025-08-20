@@ -1,7 +1,9 @@
+# Use Ubuntu 22.04 LTS (stable, long-term support)
 FROM ubuntu:22.04
 
-# System dependencies
-RUN apt-get update && apt-get install -y \
+# Install dependencies
+RUN apt-get update && \
+	apt-get install -y --no-install-recommends \
 	curl \
 	git \
 	build-essential \
@@ -12,18 +14,20 @@ RUN apt-get update && apt-get install -y \
 	python3-pip \
 	ca-certificates \
 	gnupg \
+	bash \
 	&& rm -rf /var/lib/apt/lists/*
 
-# Install Rust
-RUN curl -sSfL https://static.rust-lang.org/dist/rust-1.79.0-x86_64-unknown-linux-gnu.tar.gz \
-    | tar -xz -C /tmp \
- 	&& /tmp/rust-1.79.0-x86_64-unknown-linux-gnu/install.sh --prefix=/usr/local \
- 	&& rm -rf /tmp/rust-1.79.0-x86_64-unknown-linux-gnu
+# Set Solana version
+ARG SOLANA_RELEASE=v1.18.12
 
-# Install Solana CLI
-RUN curl -sSfL https://github.com/solana-labs/solana/releases/download/v1.18.12/solana-release-x86_64-unknown-linux-gnu.tar.bz2   | tar -xj -C /usr/local --strip-components=1
+# Install Solana
+RUN curl --proto '=https' --tlsv1.2 -sSfL https://solana-install.solana.workers.dev | bash
 
-# Install Anchor CLI
-RUN cargo install --git https://github.com/coral-xyz/anchor --tag v0.31.1 anchor-cli --locked --root /usr/local
+# Add Solana to PATH
+ENV PATH="/root/.local/share/solana/install/active_release/bin:${PATH}"
 
+# Set workspace
 WORKDIR /workspace
+
+# Default shell
+CMD ["/bin/bash"]
