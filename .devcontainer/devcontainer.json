@@ -1,8 +1,6 @@
 {
 	"name": "Solana Dev",
-	"build": {
-		"dockerfile": "Dockerfile"
-	},
+	"image": "hellox3030/solana-env:v0.0.0",
 	"customizations": {
 		"vscode": {
 			"extensions": [
