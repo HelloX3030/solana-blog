@@ -1,6 +1,6 @@
 {
 	"name": "Solana Dev",
-	"image": "hellox3030/solana-env:v0.0.0",
+	"image": "ghcr.io/hellox3030/solana-env:v0.0.0",
 	"customizations": {
 		"vscode": {
 			"extensions": [
