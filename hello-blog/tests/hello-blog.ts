@@ -94,8 +94,18 @@ describe("commit-log", () => {
 		}).rpc();
 	const afterBalance = await provider.connection.getBalance(provider.wallet.publicKey);
 	console.log("Lamports refunded:", afterBalance - beforeBalance);
-
-	// Optional: assert that some lamports were refunded
 	assert.ok(afterBalance > beforeBalance, "User should receive refunded lamports");
-	});
+
+	// Check if Account still exists
+	try {
+		await program.account.commitEntry.fetch(entryKeypair.publicKey);
+		assert.fail("Account should no longer exist");
+	}
+	catch (err: any) {
+		assert.ok(
+			err.message.includes("Account does not exist") || err.message.includes("Failed to find account"),
+			"Expected error for missing account"
+  		);
+	}
+});
 });
