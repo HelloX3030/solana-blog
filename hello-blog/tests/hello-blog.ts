@@ -84,11 +84,18 @@ describe("commit-log", () => {
 		assert.equal(accountData.description, "Closing Entry Description");
 	}
 
+	// Test Closing
+	const beforeBalance = await provider.connection.getBalance(provider.wallet.publicKey);
 	await program.methods
 		.closeEntry()
 		.accounts({
 			entry: entryKeypair.publicKey,
 			user: provider.wallet.publicKey,
 		}).rpc();
-  });
+	const afterBalance = await provider.connection.getBalance(provider.wallet.publicKey);
+	console.log("Lamports refunded:", afterBalance - beforeBalance);
+
+	// Optional: assert that some lamports were refunded
+	assert.ok(afterBalance > beforeBalance, "User should receive refunded lamports");
+	});
 });
