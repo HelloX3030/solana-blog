@@ -32,6 +32,10 @@ pub mod commit_log {
         entry.description = new_description;
         Ok(())
     }
+
+    pub fn close_entry(_ctx: Context<CloseEntry>) -> Result<()> {
+        Ok(())
+    }
 }
 
 #[derive(Accounts)]
@@ -59,6 +63,15 @@ pub struct UpdateTitle<'info> {
 pub struct UpdateDescription<'info> {
     #[account(mut)]
     pub entry: Account<'info, CommitEntry>,
+}
+
+#[derive(Accounts)]
+pub struct CloseEntry<'info> {
+    #[account(mut, close = user)]
+    pub entry: Account<'info, CommitEntry>,
+
+    #[account(mut)]
+    pub user: Signer<'info>,
 }
 
 // Account definition

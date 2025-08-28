@@ -19,7 +19,6 @@ describe("commit-log", () => {
       .accounts({
         entry: entryKeypair.publicKey,
         user: provider.wallet.publicKey,
-        systemProgram: anchor.web3.SystemProgram.programId,
       })
       .signers([entryKeypair])
       .rpc();
@@ -39,7 +38,6 @@ describe("commit-log", () => {
       .accounts({
         entry: entryKeypair.publicKey,
         user: provider.wallet.publicKey,
-        systemProgram: anchor.web3.SystemProgram.programId,
       })
       .signers([entryKeypair])
       .rpc();
@@ -65,5 +63,32 @@ describe("commit-log", () => {
 		const updatedAccount = await program.account.commitEntry.fetch(entryKeypair.publicKey);
 		assert.equal(updatedAccount.description, "New Description");
 	}
+  });
+
+  it ("Close Commit Entry!", async () => {
+	const entryKeypair = anchor.web3.Keypair.generate();
+
+	// Create Account
+	await program.methods
+		.createEntry("Closing Entry", "Closing Entry Description")
+		.accounts({
+			entry: entryKeypair.publicKey,
+			user: provider.wallet.publicKey,
+		})
+		.signers([entryKeypair]).rpc();
+	
+	// Check Account
+	{
+		const accountData = await program.account.commitEntry.fetch(entryKeypair.publicKey);
+		assert.equal(accountData.title, "Closing Entry");
+		assert.equal(accountData.description, "Closing Entry Description");
+	}
+
+	await program.methods
+		.closeEntry()
+		.accounts({
+			entry: entryKeypair.publicKey,
+			user: provider.wallet.publicKey,
+		}).rpc();
   });
 });
