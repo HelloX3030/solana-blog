@@ -15,11 +15,13 @@ pub mod commit_log {
         entry.timestamp = Clock::get()?.unix_timestamp;
         entry.title = title;
         entry.description = description;
+        entry.owner = ctx.accounts.user.key();
         Ok(())
     }
 
     pub fn update_title(ctx: Context<UpdateTitle>, new_title: String) -> Result<()> {
         let entry = &mut ctx.accounts.entry;
+        require_keys_eq!(entry.owner, ctx.accounts.user.key());
         entry.title = new_title;
         Ok(())
     }
@@ -29,11 +31,13 @@ pub mod commit_log {
         new_description: String,
     ) -> Result<()> {
         let entry = &mut ctx.accounts.entry;
+        require_keys_eq!(entry.owner, ctx.accounts.user.key());
         entry.description = new_description;
         Ok(())
     }
 
-    pub fn close_entry(_ctx: Context<CloseEntry>) -> Result<()> {
+    pub fn close_entry(ctx: Context<CloseEntry>) -> Result<()> {
+        require_keys_eq!(ctx.accounts.entry.owner, ctx.accounts.user.key());
         Ok(())
     }
 }
@@ -57,12 +61,14 @@ pub struct CreateEntry<'info> {
 pub struct UpdateTitle<'info> {
     #[account(mut)]
     pub entry: Account<'info, CommitEntry>,
+    pub user: Signer<'info>,
 }
 
 #[derive(Accounts)]
 pub struct UpdateDescription<'info> {
     #[account(mut)]
     pub entry: Account<'info, CommitEntry>,
+    pub user: Signer<'info>,
 }
 
 #[derive(Accounts)]
@@ -80,4 +86,5 @@ pub struct CommitEntry {
     pub timestamp: i64,
     pub title: String,
     pub description: String,
+    pub owner: Pubkey,
 }

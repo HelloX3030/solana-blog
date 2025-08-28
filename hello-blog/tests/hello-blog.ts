@@ -63,6 +63,47 @@ describe("commit-log", () => {
 		const updatedAccount = await program.account.commitEntry.fetch(entryKeypair.publicKey);
 		assert.equal(updatedAccount.description, "New Description");
 	}
+
+	// Check Permissions
+	const otherKeypair = anchor.web3.Keypair.generate();
+	try {
+		await program.methods
+			.updateTitle("Other Title")
+			.accounts({
+				entry: entryKeypair.publicKey,
+				user: otherKeypair.publicKey,
+			})
+			.signers([otherKeypair]).rpc();
+
+		assert.fail("Expected transaction to fail but it succeeded");
+	} catch (err: any) {
+		assert.ok(
+			err.message.includes("RequireKeysEqViolated") ||
+			err.message.includes("require_keys_eq"),
+			"Expected RequireKeysEqViolated error"
+		);
+		const accountData = await program.account.commitEntry.fetch(entryKeypair.publicKey);
+		assert.equal(accountData.title, "New Title");
+	}
+	try {
+		await program.methods
+			.updateDescription("Other Description")
+			.accounts({
+				entry: entryKeypair.publicKey,
+				user: otherKeypair.publicKey,
+			})
+			.signers([otherKeypair]).rpc();
+
+		assert.fail("Expected transaction to fail but it succeeded");
+	} catch (err: any) {
+		assert.ok(
+			err.message.includes("RequireKeysEqViolated") ||
+			err.message.includes("require_keys_eq"),
+			"Expected RequireKeysEqViolated error"
+		);
+		const accountData = await program.account.commitEntry.fetch(entryKeypair.publicKey);
+		assert.equal(accountData.description, "New Description");
+	}
   });
 
   it ("Close Commit Entry!", async () => {
@@ -93,7 +134,6 @@ describe("commit-log", () => {
 			user: provider.wallet.publicKey,
 		}).rpc();
 	const afterBalance = await provider.connection.getBalance(provider.wallet.publicKey);
-	console.log("Lamports refunded:", afterBalance - beforeBalance);
 	assert.ok(afterBalance > beforeBalance, "User should receive refunded lamports");
 
 	// Check if Account still exists
