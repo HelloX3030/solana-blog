@@ -1,5 +1,22 @@
 # solana-blog
 
+# Port Forwardning
+
+devcontainer.json
+
+```json
+  "forwardPorts": [5173],
+  "remoteUser": "root"
+```
+
+package.json (in app/)
+
+```json
+"scripts": {
+  "dev": "vite --host"
+}
+```
+
 # Smart Contract
 
 ```rs
