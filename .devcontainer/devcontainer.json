@@ -13,5 +13,7 @@
 			}
 		}
 	},
-	"postCreateCommand": "solana --version && anchor --version && rustc --version && cargo --version && node --version && npm --version"
+	"postCreateCommand": "solana --version && anchor --version && rustc --version && cargo --version && node --version && npm --version",
+	"forwardPorts": [5173],
+	"remoteUser": "root"
 }
