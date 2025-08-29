@@ -1,9 +1,9 @@
 use anchor_lang::prelude::*;
 
-declare_id!("ARJt1jkcVDbryjvgnEXjsR9Q8i84oxQSCq23nbynF5wK");
+declare_id!("5jDFqcxUzYeiyH11jLeuNnYSBZ3yQWk7Kcm39dQ34yQm");
 
 #[program]
-pub mod commit_log {
+pub mod hello_blog {
     use super::*;
 
     pub fn create_entry(

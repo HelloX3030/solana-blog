@@ -6,7 +6,7 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
-hello_blog = "ARJt1jkcVDbryjvgnEXjsR9Q8i84oxQSCq23nbynF5wK"
+hello_blog = "5jDFqcxUzYeiyH11jLeuNnYSBZ3yQWk7Kcm39dQ34yQm"
 
 [registry]
 url = "https://api.apr.dev"
