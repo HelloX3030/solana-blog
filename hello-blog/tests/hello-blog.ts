@@ -75,7 +75,7 @@ describe("commit-log", () => {
 			})
 			.signers([otherKeypair]).rpc();
 
-		assert.fail("Expected transaction to fail but it succeeded");
+		assert.fail("Expected updateTitle to fail but it succeeded");
 	} catch (err: any) {
 		assert.ok(
 			err.message.includes("RequireKeysEqViolated") ||
@@ -94,7 +94,7 @@ describe("commit-log", () => {
 			})
 			.signers([otherKeypair]).rpc();
 
-		assert.fail("Expected transaction to fail but it succeeded");
+		assert.fail("Expected updateDescription to fail but it succeeded");
 	} catch (err: any) {
 		assert.ok(
 			err.message.includes("RequireKeysEqViolated") ||
@@ -123,6 +123,30 @@ describe("commit-log", () => {
 		const accountData = await program.account.commitEntry.fetch(entryKeypair.publicKey);
 		assert.equal(accountData.title, "Closing Entry");
 		assert.equal(accountData.description, "Closing Entry Description");
+	}
+
+	// Check Permissions
+	const otherKeypair = anchor.web3.Keypair.generate();
+	try {
+		await program.methods
+			.closeEntry()
+			.accounts({
+				entry: entryKeypair.publicKey,
+				user: otherKeypair.publicKey,
+			})
+			.signers([otherKeypair]).rpc();
+			assert.fail("Expected closeEntry to fail but it succeeded");
+	} catch (err: any) {
+		assert.ok(
+			err.message.includes("RequireKeysEqViolated") ||
+			err.message.includes("require_keys_eq"),
+			"Expected RequireKeysEqViolated error"
+		);
+		try {
+			await program.account.commitEntry.fetch(entryKeypair.publicKey);
+		} catch (err: any) {
+			assert.fail("Account does no longer exist, even with permission issues");
+		}
 	}
 
 	// Test Closing
