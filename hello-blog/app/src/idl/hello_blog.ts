@@ -1,0 +1,180 @@
+/**
+ * Program IDL in camelCase format in order to be used in JS/TS.
+ *
+ * Note that this is only a type helper and is not the actual IDL. The original
+ * IDL can be found at `target/idl/hello_blog.json`.
+ */
+export type HelloBlog = {
+  "address": "5jDFqcxUzYeiyH11jLeuNnYSBZ3yQWk7Kcm39dQ34yQm",
+  "metadata": {
+    "name": "helloBlog",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "closeEntry",
+      "discriminator": [
+        132,
+        26,
+        202,
+        145,
+        190,
+        37,
+        114,
+        67
+      ],
+      "accounts": [
+        {
+          "name": "entry",
+          "writable": true
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "createEntry",
+      "discriminator": [
+        248,
+        207,
+        142,
+        242,
+        66,
+        162,
+        150,
+        16
+      ],
+      "accounts": [
+        {
+          "name": "entry",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "updateDescription",
+      "discriminator": [
+        192,
+        56,
+        16,
+        166,
+        212,
+        219,
+        112,
+        142
+      ],
+      "accounts": [
+        {
+          "name": "entry",
+          "writable": true
+        },
+        {
+          "name": "user",
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "newDescription",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "updateTitle",
+      "discriminator": [
+        212,
+        31,
+        130,
+        151,
+        16,
+        148,
+        190,
+        117
+      ],
+      "accounts": [
+        {
+          "name": "entry",
+          "writable": true
+        },
+        {
+          "name": "user",
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "newTitle",
+          "type": "string"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "commitEntry",
+      "discriminator": [
+        198,
+        225,
+        226,
+        146,
+        150,
+        49,
+        247,
+        206
+      ]
+    }
+  ],
+  "types": [
+    {
+      "name": "commitEntry",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "timestamp",
+            "type": "i64"
+          },
+          {
+            "name": "title",
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "type": "string"
+          },
+          {
+            "name": "owner",
+            "type": "pubkey"
+          }
+        ]
+      }
+    }
+  ]
+};
